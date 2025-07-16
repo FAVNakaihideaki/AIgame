@@ -1,0 +1,413 @@
+/* 基本設定とピクセルフォント */
+body {
+    font-family: 'Press Start 2P', cursive; /* Google Fontsから読み込んだフォント */
+    background-color: #222; /* 暗めの背景色 */
+    color: #eee; /* 明るめの文字色 */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh; /* 画面いっぱいに表示 */
+    overflow-x: hidden; /* 横スクロール禁止 */
+    image-rendering: pixelated; /* 画像がドット絵のように表示されるように */
+    -webkit-font-smoothing: none; /* アンチエイリアスを無効にしてフォントもドット絵風に */
+    font-smoothing: none;
+}
+
+/* ヘッダーとナビゲーション */
+header {
+    width: 100%;
+    background-color: #333;
+    padding: 10px 0;
+    text-align: center;
+    border-bottom: 3px solid #555;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+h1 {
+    color: #0f0; /* 緑色の見出し */
+    text-shadow: 2px 2px #000;
+    margin: 10px 0;
+    font-size: 2em; /* ドット絵感を出すため大きめに */
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav ul li {
+    margin: 0 15px;
+}
+
+nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9em;
+    padding: 5px 10px;
+    border: 2px solid #555;
+    background-color: #444;
+    transition: background-color 0.1s linear;
+}
+
+nav a:hover {
+    background-color: #666;
+    border-color: #fff;
+}
+
+/* ゲームコンテナ */
+.game-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #444;
+    border: 5px solid #0f0; /* 緑色のボーダー */
+    padding: 20px;
+    margin: 20px auto;
+    box-shadow: 5px 5px #000; /* 立体感を出す影 */
+    width: 90%; /* レスポンシブ対応 */
+    max-width: 900px;
+    box-sizing: border-box;
+}
+
+/* リソースパネル */
+.resource-panel {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #1a1a1a;
+    border: 2px solid #0a0;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.7);
+}
+
+.resource-panel p {
+    margin: 0;
+    font-size: 1.1em;
+    color: #fff;
+}
+
+.resource-panel p span {
+    color: #0f0; /* リソースの値を緑色に */
+}
+
+/* 建設エリア（グリッド） */
+.construction-area {
+    display: grid;
+    /* JavaScriptでgrid-template-columnsを設定 */
+    width: 100%;
+    max-width: 600px; /* グリッドの最大幅 */
+    aspect-ratio: 1 / 1; /* 正方形を維持 */
+    border: 3px solid #0a0;
+    background-color: #3d3d3d; /* 地面の基本色 */
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.7);
+}
+
+.grid-cell {
+    width: 100%;
+    height: 100%;
+    background-color: #555; /* 各セルのデフォルト色 */
+    border: 1px solid #666; /* セル間の区切り線 */
+    box-sizing: border-box; /* パディングとボーダーを幅に含める */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* はみ出しを隠す */
+    position: relative;
+    cursor: pointer;
+}
+
+/* 施設の基本スタイル - CSSのみでピクセルアート風を表現 */
+.grid-cell.residential {
+    background-color: #0088ff; /* 住宅は青 */
+    /* ドット絵風の屋根や窓を表現 (例: グラデーションや影) */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0,0,0,0.5), /* 内部の暗いボーダー */
+        inset 0 0 0 2px rgba(255,255,255,0.2), /* 内部の明るいハイライト */
+        0px -5px 0px -2px #ff0000, /* 屋根の表現 (赤) */
+        0px -5px 0px -1px rgba(0,0,0,0.5), /* 屋根の影 */
+        0px 2px 0px 0px rgba(0,0,0,0.3) inset, /* 下部に影 */
+        2px 0px 0px 0px rgba(0,0,0,0.3) inset; /* 右部に影 */
+    position: relative; /* 子要素の位置指定のため */
+}
+
+/* 住宅の窓の表現 (例: 疑似要素) */
+.grid-cell.residential::before,
+.grid-cell.residential::after {
+    content: '';
+    position: absolute;
+    background-color: #ffff00; /* 窓の色 (黄色) */
+    border: 1px solid #000;
+    width: 6px;
+    height: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    image-rendering: pixelated;
+}
+.grid-cell.residential::before {
+    left: 20%;
+}
+.grid-cell.residential::after {
+    right: 20%;
+}
+
+.grid-cell.commercial {
+    background-color: #ffaa00; /* 商業施設はオレンジ */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0,0,0,0.5),
+        inset 0 0 0 2px rgba(255,255,255,0.2),
+        0px -4px 0px -2px #8800ff, /* 紫の看板風 */
+        0px 2px 0px 0px rgba(0,0,0,0.3) inset,
+        2px 0px 0px 0px rgba(0,0,0,0.3) inset;
+}
+/* 商業施設のドアの表現 */
+.grid-cell.commercial::after {
+    content: '';
+    position: absolute;
+    background-color: #333; /* ドアの色 */
+    border: 1px solid #000;
+    width: 8px;
+    height: 12px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    image-rendering: pixelated;
+}
+
+.grid-cell.power {
+    background-color: #ff00ff; /* 発電所はマゼンタ */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0,0,0,0.5),
+        inset 0 0 0 2px rgba(255,255,255,0.2),
+        0px -10px 0px -5px #888, /* 煙突の表現 (灰色) */
+        0px -10px 0px -4px rgba(0,0,0,0.5), /* 煙突の影 */
+        0px 2px 0px 0px rgba(0,0,0,0.3) inset,
+        2px 0px 0px 0px rgba(0,0,0,0.3) inset;
+    position: relative;
+}
+/* 発電所の煙突の煙のアニメーション (簡易版) */
+.grid-cell.power::before {
+    content: '☁️'; /* 煙の絵文字、またはもっとシンプルなドット */
+    position: absolute;
+    font-size: 10px;
+    color: #eee;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: smoke-puff 2s infinite linear;
+    image-rendering: pixelated;
+}
+
+@keyframes smoke-puff {
+    0% { opacity: 0; transform: translate(-50%, 0); }
+    50% { opacity: 1; transform: translate(-50%, -10px); }
+    100% { opacity: 0; transform: translate(-50%, -20px); }
+}
+
+
+.grid-cell.park {
+    background-color: #00cc00; /* 公園は緑 */
+    box-shadow: 
+        inset 0 0 0 1px rgba(0,0,0,0.5),
+        inset 0 0 0 2px rgba(255,255,255,0.2),
+        0px 2px 0px 0px rgba(0,0,0,0.3) inset,
+        2px 0px 0px 0px rgba(0,0,0,0.3) inset;
+    position: relative;
+}
+/* 公園の木の表現 */
+.grid-cell.park::before {
+    content: '';
+    position: absolute;
+    background-color: #8b4513; /* 幹の色 */
+    width: 6px;
+    height: 8px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #000;
+    image-rendering: pixelated;
+}
+.grid-cell.park::after {
+    content: '';
+    position: absolute;
+    background-color: #008800; /* 葉の色 */
+    width: 14px;
+    height: 10px;
+    bottom: 6px; /* 幹の上に配置 */
+    left: 50%;
+    transform: translateX(-50%);
+    border: 1px solid #000;
+    border-radius: 50% 50% 0 0; /* 丸みのある葉 */
+    image-rendering: pixelated;
+}
+
+/* コントロールパネル */
+.control-panel {
+    display: flex;
+    flex-wrap: wrap; /* ボタンが多ければ改行 */
+    justify-content: center;
+    gap: 10px; /* ボタン間のスペース */
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: #1a1a1a;
+    border: 2px solid #0a0;
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.7);
+}
+
+/* ピクセルボタンのスタイル */
+.pixel-button {
+    background-color: #0f0; /* ボタンの基本色 */
+    color: #111;
+    border: none;
+    border-top: 3px solid #6f6; /* 上にハイライト */
+    border-left: 3px solid #6f6; /* 左にハイライト */
+    border-bottom: 3px solid #080; /* 下にシャドウ */
+    border-right: 3px solid #080; /* 右にシャドウ */
+    padding: 8px 15px;
+    font-family: 'Press Start 2P', cursive;
+    font-size: 0.9em;
+    cursor: pointer;
+    box-shadow: 2px 2px #000;
+    transition: all 0.05s linear;
+    white-space: nowrap; /* ボタン内のテキストを改行しない */
+}
+
+.pixel-button:hover {
+    background-color: #3c3;
+    border-top: 3px solid #8f8;
+    border-left: 3px solid #8f8;
+    border-bottom: 3px solid #0a0;
+    border-right: 3px solid #0a0;
+    transform: translate(1px, 1px); /* 少し沈むアニメーション */
+    box-shadow: 1px 1px #000;
+}
+
+.pixel-button:active {
+    transform: translate(2px, 2px); /* さらに深く沈む */
+    box-shadow: none;
+    border: 3px solid #080; /* ボーダーを均一に */
+}
+
+/* 選択中のボタン */
+.pixel-button.active {
+    background-color: #ff0; /* 選択中は黄色 */
+    color: #333;
+    border-top: 3px solid #ff8;
+    border-left: 3px solid #ff8;
+    border-bottom: 3px solid #cc0;
+    border-right: 3px solid #cc0;
+}
+
+/* メッセージエリア */
+#message-area {
+    margin-top: 20px;
+    font-size: 1.1em;
+    color: #ff0; /* 警告や重要なメッセージは黄色 */
+    text-align: center;
+    min-height: 2em; /* レイアウト崩れ防止 */
+}
+
+/* ゲームオーバーオーバーレイ */
+#game-over-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8); /* 半透明の黒背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* 最前面に表示 */
+}
+
+.game-over-content {
+    background-color: #333;
+    border: 5px solid #f00; /* 赤いボーダー */
+    padding: 30px;
+    text-align: center;
+    box-shadow: 8px 8px #000;
+}
+
+.game-over-content h2 {
+    color: #f00; /* 赤い見出し */
+    font-size: 2.5em;
+    margin-bottom: 15px;
+    text-shadow: 3px 3px #000;
+}
+
+.game-over-content p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.game-over-content button {
+    margin-top: 20px;
+    /* pixel-buttonのスタイルを継承 */
+}
+
+.hidden {
+    display: none !important; /* 非表示にする */
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    nav ul li {
+        margin: 0 8px;
+    }
+
+    nav a {
+        font-size: 0.8em;
+        padding: 3px 7px;
+    }
+
+    .game-container {
+        padding: 10px;
+        width: 95%;
+    }
+
+    .resource-panel p {
+        font-size: 0.9em;
+    }
+
+    .control-panel {
+        gap: 5px;
+    }
+
+    .pixel-button {
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+
+    .game-over-content h2 {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .resource-panel {
+        flex-direction: column; /* 縦並びに変更 */
+        align-items: flex-start;
+        gap: 5px;
+    }
+    .resource-panel p {
+        width: 100%;
+    }
+    .control-panel {
+        flex-direction: column; /* ボタンを縦並びに */
+        gap: 8px;
+    }
+    .pixel-button {
+        width: 90%; /* ボタン幅を広げる */
+    }
+}

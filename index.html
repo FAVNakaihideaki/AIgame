@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>未来都市シミュレーション - ピクセルシティ</title>
+    <link rel="stylesheet" href="./style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">ホーム</a></li>
+                <li><a href="#how-to-play">遊び方</a></li>
+                <li><a href="#high-score">最高記録</a></li>
+            </ul>
+        </nav>
+        <h1>ピクセルシティ建設</h1>
+    </header>
+
+    <main>
+        <div class="game-container">
+            <div class="resource-panel">
+                <p>資金: <span id="money" class="pixel-text">10000</span></p>
+                <p>人口: <span id="population" class="pixel-text">0</span></p>
+                <p>電力: <span id="power" class="pixel-text">0</span></p>
+                <p>満足度: <span id="satisfaction" class="pixel-text">50</span>%</p>
+                <p id="rival-message" class="pixel-text"></p>
+            </div>
+
+            <div class="construction-area" id="game-grid"></div>
+
+            <div class="control-panel">
+                <button id="build-residential" class="pixel-button">住宅</button>
+                <button id="build-commercial" class="pixel-button">商業</button>
+                <button id="build-power" class="pixel-button">発電所</button>
+                <button id="build-park" class="pixel-button">公園</button>
+                <button id="delete-mode" class="pixel-button">撤去</button>
+                <button id="next-turn" class="pixel-button">ターンを進める</button>
+                <button id="reset-game" class="pixel-button">リセット</button>
+            </div>
+        </div>
+
+        <div id="message-area" class="pixel-text"></div>
+
+        <div id="game-over-overlay" class="hidden">
+            <div class="game-over-content">
+                <h2 class="pixel-text">ゲームオーバー</h2>
+                <p class="pixel-text">資金が尽きてしまいました。</p>
+                <p class="pixel-text">最終人口: <span id="final-population"></span></p>
+                <p class="pixel-text">最終ターン: <span id="final-turn"></span></p>
+                <button id="restart-game" class="pixel-button">もう一度プレイ</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p class="pixel-text">&copy; 2025 ピクセルシティ</p>
+    </footer>
+
+    <script src="./script.js"></script>
+</body>
+</html>
